@@ -30,7 +30,7 @@
 
         $(function () {
           $.getJSON("medName.txt", function (data) {
-            availableTags = data.responseJSON;
+            availableTags = data;
           });
           $("#medName").autocomplete({
             source: availableTags,
