@@ -10,6 +10,7 @@
     /> 
 
     <script type="text/javascript">
+      var allMed = ['Abc','Def','Xyz']
       $(document).ready(function () {
         $("#dialog").dialog({
           autoOpen: false,
@@ -28,8 +29,9 @@
         });
 
         $.getJSON("medName.txt", function (data) {
-          console.log(data);
+          console.log(data.responseText);
         });
+
       }); 
 
       jQuery.fn.extend({
