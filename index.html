@@ -7,10 +7,9 @@
     <link
       rel="stylesheet"
       href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css"
-    /> 
+    />
 
     <script type="text/javascript">
-      var allMed = ['Abc','Def','Xyz']
       $(document).ready(function () {
         $("#dialog").dialog({
           autoOpen: false,
@@ -32,7 +31,47 @@
           console.log(data.responseText);
         });
 
-      }); 
+
+        
+
+        $(function () {
+        var availableTags = [
+          "ActionScript",
+          "AppleScript",
+          "Asp",
+          "BASIC",
+          "C",
+          "C++",
+          "Clojure",
+          "COBOL",
+          "ColdFusion",
+          "Erlang",
+          "Fortran",
+          "Groovy",
+          "Haskell",
+          "Java",
+          "JavaScript",
+          "Lisp",
+          "Perl",
+          "PHP",
+          "Python",
+          "Ruby",
+          "Scala",
+          "Scheme",
+        ];
+        $("#medName").autocomplete({
+          source: availableTags,
+        });
+      });
+
+
+
+
+
+
+
+
+      });
 
       jQuery.fn.extend({
         live: function (event, callback) {
@@ -49,8 +88,9 @@
         printWindow.document.write("</head><body >");
         printWindow.document.write(divContents);
         printWindow.document.write("</body></html>");
-        printWindow.document.close();
         printWindow.print();
+        
+        printWindow.close();
       });
 
       function addMed() {
@@ -75,6 +115,22 @@
       .small-Width {
         width: 40px;
       }
+
+      .ui-autocomplete {
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: default;
+        z-index: 111 !important;
+      }
+
+      /* .ui-dialog {
+        z-index: 100 !important;
+      }
+
+      .ui-front {
+        z-index: 109 !important;
+      } */
 
       #addRx {
         border-radius: 8px;
@@ -196,6 +252,7 @@
     <input type="button" value="Add Rx" id="addRx" />
     <input type="button" value="Save as PDF" id="btnPrint" />
 
+    <!--Dialog div begins-->
     <div id="dialog" title="Add Rx">
       <form>
         <fieldset>
@@ -227,7 +284,6 @@
         </fieldset>
       </form>
     </div>
-
-    <script></script>
+    <!--Dialog div ends-->
   </body>
 </html>
