@@ -62,9 +62,11 @@
           $(textArea[i]).text($(textArea[i]).val());
         }
 
+        const pName = $('#name').val().split(' ').join('_');
+        const dateStamp = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
         var divContents = $("#mainFrm").html();
         var printWindow = window.open("", "", "height=400,width=800");
-        printWindow.document.write("<html><head><title>E-Prescription</title>");
+        printWindow.document.write("<html><head><title>EP-"+pName+"_"+dateStamp+"</title>");
         printWindow.document.write("</head><body >");
         printWindow.document.write(divContents);
         printWindow.document.write("</body></html>");
