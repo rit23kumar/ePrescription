@@ -31,10 +31,11 @@
         $(function () {
           $.getJSON("medName.txt", function (data) {
             availableTags = data;
-          });
-          $("#medName").autocomplete({
+            $("#medName").autocomplete({
             source: availableTags,
           });
+          });
+          
         });
       });
 
