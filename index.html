@@ -32,12 +32,15 @@
           $.getJSON("medName.txt", function (data) {
             availableTags = data;
             $("#medName").autocomplete({
-            source: availableTags,
+              source: availableTags,
+            });
           });
-          });
-          
         });
+
+        $('#gender').selectmenu().selectmenu('refresh', true);
+        $('.ui-selectmenu-button').attr("style",'width:auto');
       });
+      //<!--Ready function ends-->
 
       jQuery.fn.extend({
         live: function (event, callback) {
@@ -48,6 +51,17 @@
         },
       });
       $("#btnPrint").live("click", function () {
+        //Set value attribute to the provided values, so that it iwll appear in print
+        var inputElements = $("#mainFrm input");
+        for (var i = 0; i < inputElements.length; i++) {
+          $(inputElements[i]).attr('value', inputElements[i].value);
+        }
+
+        var textArea = $("#mainFrm textarea");
+        for (var i = 0; i < textArea.length; i++) {
+          $(textArea[i]).attr('value', textArea[i].value);
+        }
+
         var divContents = $("#mainFrm").html();
         var printWindow = window.open("", "", "height=400,width=800");
         printWindow.document.write("<html><head><title>E-Prescription</title>");
@@ -89,14 +103,6 @@
         cursor: default;
         z-index: 111 !important;
       }
-
-      /* .ui-dialog {
-        z-index: 100 !important;
-      }
-
-      .ui-front {
-        z-index: 109 !important;
-      } */
 
       #addRx {
         border-radius: 8px;
@@ -156,6 +162,16 @@
           </td>
         </tr>
         <tr>
+          <td>Gender:</td>
+          <td>
+            <select name="number" id="gender">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
           <td></td>
           <td></td>
         </tr>
@@ -178,13 +194,15 @@
         <tr>
           <td>BP:</td>
           <td>
-            <input class="small-Width" type="text" id="bp1" /> <b>By</b>
-            <input class="small-Width" type="text" id="bp2" /> mmHg
+            <input class="small-Width" type="number" id="bp1" /> <b>By</b>
+            <input class="small-Width" type="number" id="bp2" /> mmHg
           </td>
         </tr>
         <tr>
           <td>Glucose:</td>
-          <td><input class="small-Width" type="text" id="glucose" /> mg/dL</td>
+          <td>
+            <input class="small-Width" type="number" id="glucose" /> mg/dL
+          </td>
         </tr>
       </table>
       <hr />
