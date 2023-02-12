@@ -59,7 +59,7 @@
 
         var textArea = $("#mainFrm textarea");
         for (var i = 0; i < textArea.length; i++) {
-          $(textArea[i]).attr('value', textArea[i].value);
+          $(textArea[i]).text($(textArea[i]).val());
         }
 
         var divContents = $("#mainFrm").html();
@@ -93,7 +93,7 @@
 
     <style>
       .small-Width {
-        width: 40px;
+        width: 50px;
       }
 
       .ui-autocomplete {
@@ -210,15 +210,15 @@
       <table id="diagnosis">
         <tr>
           <td><b>Query:</b></td>
-          <td><textarea rows="3" cols="25" id="pd"></textarea></td>
+          <td><textarea rows="3" cols="25" id="query"></textarea></td>
         </tr>
         <tr>
           <td><b>Provisional Diagnosis:</b></td>
-          <td><textarea rows="3" cols="25" id="pd"></textarea></td>
+          <td><textarea rows="3" cols="25" id="provDiag"></textarea></td>
         </tr>
         <tr>
           <td><b>Advice:</b></td>
-          <td><textarea rows="3" cols="25" id="pd"></textarea></td>
+          <td><textarea rows="3" cols="25" id="advice"></textarea></td>
         </tr>
       </table>
       <b>Rx:</b>
