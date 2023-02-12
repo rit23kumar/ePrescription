@@ -10,6 +10,7 @@
     />
 
     <script type="text/javascript">
+      var availableTags = [];
       $(document).ready(function () {
         $("#dialog").dialog({
           autoOpen: false,
@@ -27,50 +28,14 @@
           $("#dialog").dialog("open");
         });
 
-        $.getJSON("medName.txt", function (data) {
-          console.log(data.responseText);
-        });
-
-
-        
-
         $(function () {
-        var availableTags = [
-          "ActionScript",
-          "AppleScript",
-          "Asp",
-          "BASIC",
-          "C",
-          "C++",
-          "Clojure",
-          "COBOL",
-          "ColdFusion",
-          "Erlang",
-          "Fortran",
-          "Groovy",
-          "Haskell",
-          "Java",
-          "JavaScript",
-          "Lisp",
-          "Perl",
-          "PHP",
-          "Python",
-          "Ruby",
-          "Scala",
-          "Scheme",
-        ];
-        $("#medName").autocomplete({
-          source: availableTags,
+          $.getJSON("medName.txt", function (data) {
+            availableTags = data.responseJSON;
+          });
+          $("#medName").autocomplete({
+            source: availableTags,
+          });
         });
-      });
-
-
-
-
-
-
-
-
       });
 
       jQuery.fn.extend({
@@ -89,7 +54,7 @@
         printWindow.document.write(divContents);
         printWindow.document.write("</body></html>");
         printWindow.print();
-        
+
         printWindow.close();
       });
 
