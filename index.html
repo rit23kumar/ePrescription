@@ -1,0 +1,146 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>E-Prescription</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+    <script type="text/javascript">
+		$(document).ready(function () {
+			$("#dialog").dialog({ autoOpen: false, modal: true, show: {
+				effect: "blind",
+				duration: 500
+			},
+			hide: {
+				effect: "explode",
+				duration: 500
+			} });
+			$("#addRx").click(function () {
+				$("#dialog").dialog('open');
+			});
+		});
+		
+		jQuery.fn.extend({
+			live: function (event, callback) {
+			   if (this.selector) {
+					jQuery(document).on(event, this.selector, callback);
+				}
+				return this;
+			}
+		});
+        $("#btnPrint").live("click", function () {
+            var divContents = $("#mainFrm").html();
+            var printWindow = window.open('', '', 'height=400,width=800');
+            printWindow.document.write('<html><head><title>E-Prescription</title>');
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(divContents);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        });
+
+		function addMed(){
+			$( "#rx" ).append( "<tr>" +
+				"<td>" + $("#medName").val() + "</td>" +
+				"<td>" + $("#dose").val() + "</td>" +
+				"<td>" + $("#duration").val() + "</td>" +
+				"</tr>" );
+			$("#dialog").dialog('close');
+		}
+    </script>
+	
+	<style>
+	.small-Width{
+		width:40px;
+	}
+	
+	#addRx{
+	    border-radius: 8px;
+		height: 40px;
+		background-color: #0174cf;
+		color: white;
+		font-weight: 700;
+	}
+	
+	#btnPrint{
+	    float: right;
+		margin-right: 20px;
+		border-radius: 8px;
+		height: 40px;
+		background-color: #046a7a;
+		color: white;
+		font-weight: 700;
+	}
+	</style>
+</head>
+<body style="padding-left: 10px;">
+    <form id="mainFrm">
+		<div>
+			<span style="display:inline-block;" >
+				<img src="logo.png" />
+			</span>
+			<span style="display:inline-block;padding-left: 10px;">
+				<b>Dr. Mahesh Chaudhary</b><br />
+				MBBS <br />
+				MO. RH Sakra, Muzaffarpur<br />
+			</span>
+		</div>
+		<hr /><hr />
+		<table id="info">
+			<tr><td><b>Patient Info:</b></td><td></td></tr>
+			<tr><td>Patient Name:</td><td><input type="text" id="name" /></td></tr>
+			<tr><td>Address:</td><td><input type="text" id="address" /></td></tr>
+			<tr><td>Mobile No.:</td><td><input type="number" id="mobile" /></td></tr>
+			<tr><td>Age:</td><td><input class="small-Width" type="number" id="ageY" /> Yr <input class="small-Width" type="number" id="ageM" />  Months</td></tr>
+			<tr><td></td><td></td></tr>
+			<tr><td></td><td></td></tr>
+			<tr><td></td><td></td></tr>
+			<tr><td><b>Diagnostics:</b></td><td></td></tr>
+			<tr><td>Weight:</td><td><input class="small-Width" type="number" id="weight" /> Kgs</td></tr>
+			<tr><td>BP:</td><td><input class="small-Width" type="text" id="bp1" /> <b>By</b> <input class="small-Width" type="text" id="bp2" /> mmHg</td></tr>
+			<tr><td>Glucose:</td><td><input class="small-Width" type="text" id="glucose" /> mg/dL</td></tr>
+		</table>
+		<hr /><br />
+		<table id="diagnosis">
+			<tr><td><b>Query:</b></td><td><textarea rows="3" cols="25" id="pd" ></textarea></td></tr>
+			<tr><td><b>Provisional Diagnosis:</b></td><td><textarea rows="3" cols="25" id="pd" ></textarea></td></tr>
+			<tr><td><b>Advice:</b></td><td><textarea rows="3" cols="25" id="pd" ></textarea></td></tr>
+		
+		</table>
+		<b>Rx:</b>
+		<table id="rx" style="border-spacing: 10px;">
+			<tr><td><b style="padding-right: 30px;">Name:</b></td><td><b style="padding-right: 40px;">Dose:</b></td><td><b>Duration:</b></td></tr>
+		</table>
+		
+    </form>
+	
+	<br /><br /><br /><hr />
+	<input type="button" value="Add Rx" id="addRx" />
+	<input type="button" value="Save as PDF" id="btnPrint" />
+	
+	
+	<div id="dialog" title="Add Rx">
+		<form>
+		  <fieldset>
+			<label for="name">Name:</label>
+			<input type="text"id="medName" value="" class="text ui-widget-content ui-corner-all" autocomplete="off">
+			<label for="dose">Dose:</label>
+			<input type="text" id="dose" value="" class="text ui-widget-content ui-corner-all">
+			<label for="duration">Duration:</label>
+			<input type="number" id="duration" value="" class="text ui-widget-content ui-corner-all">
+			<br /><br />
+			<!-- Allow form submission with keyboard without duplicating the dialog button -->
+			<input type="button" onclick="addMed()" value="Add"/>
+		  </fieldset>
+		</form>
+	  </div>
+
+
+	  <script>
+		$.getJSON('medName.txt', function (data) {
+		console.log(data);
+		});
+	  </script>
+</body>
+</html>
