@@ -4,7 +4,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
-    <script src="printThis.js"></script>
     <link
       rel="stylesheet"
       href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css"
@@ -13,16 +12,17 @@
     <script type="text/javascript">
       var availableTags = [];
       $(document).ready(function () {
+        //Dialog 1
         $("#dialog").dialog({
           autoOpen: false,
           modal: true,
           show: {
             effect: "blind",
-            duration: 500,
+            duration: 300,
           },
           hide: {
             effect: "explode",
-            duration: 500,
+            duration: 300,
           },
         });
         $("#addRx").click(function () {
@@ -37,15 +37,34 @@
           width: "auto",
           show: {
             effect: "blind",
-            duration: 500,
+            duration: 300,
           },
           hide: {
             effect: "explode",
-            duration: 500,
+            duration: 300,
           },
         });
         $("#addInfo").click(function () {
           $("#dialog2").dialog("open");
+        });
+
+        //Dialog 3
+        $("#dialog3").dialog({
+          autoOpen: false,
+          modal: true,
+          resizable: false,
+          width: "auto",
+          show: {
+            effect: "blind",
+            duration: 300,
+          },
+          hide: {
+            effect: "explode",
+            duration: 300,
+          },
+        });
+        $("#addDesc").click(function () {
+          $("#dialog3").dialog("open");
         });
 
         $(function () {
@@ -62,7 +81,11 @@
 
         $(function () {
           $("#datepicker").datepicker();
-          $("#datepicker").datepicker("option", "dateFormat", "DD, d MM, yy");
+          $("#datepicker").datepicker("option", "dateFormat", "D, d M, yy");
+
+          $("#datepicker2").datepicker();
+          $("#datepicker2").datepicker("setDate", new Date());
+          $("#datepicker2").datepicker("option", "dateFormat", "dd/mm/yy");
         });
       });
       //<!--Ready function ends-->
@@ -75,18 +98,14 @@
           return this;
         },
       });
+
+      $.fn.ignore = function (sel) {
+        return this.clone()
+          .find(sel || ">*")
+          .remove()
+          .end();
+      };
       $("#btnPrint").live("click", function () {
-        //Set value attribute to the provided values, so that it iwll appear in print
-        var inputElements = $("#mainFrm input");
-        for (var i = 0; i < inputElements.length; i++) {
-          $(inputElements[i]).attr("value", inputElements[i].value);
-        }
-
-        var textArea = $("#mainFrm textarea");
-        for (var i = 0; i < textArea.length; i++) {
-          $(textArea[i]).text($(textArea[i]).val());
-        }
-
         const pName = $("#name").val().split(" ").join("_");
         const dateStamp = new Date()
           .toISOString()
@@ -94,8 +113,8 @@
           .split("-")
           .reverse()
           .join("-");
-        var divContents = $("#mainFrm").html();
-        var printWindow = window.open("", "", "height=400,width=800");
+        var divContents = $("#mainFrm").ignore(".excluded").html();
+        var printWindow = window.open("", "", "");
         printWindow.document.write(
           "<html><head><title>EP-" + pName + "_" + dateStamp + "</title>"
         );
@@ -124,8 +143,75 @@
         $("#dialog").dialog("close");
       }
 
-      function addInfo(){
+      function addInfo() {
+        $("#info").empty();
+        const weight =
+          $("#weight").val() == ""
+            ? ""
+            : "<td><b>Weight:</b></td> <td>" + $("#weight").val() + " Kgs</td>";
+        const bp =
+          $("#bp1").val() == ""
+            ? ""
+            : "<td><b>BP:</b></td> <td>" +
+              $("#bp1").val() +
+              "/" +
+              $("#bp2").val() +
+              " mmHg</td>";
+        const glucose =
+          $("#glucose").val() == ""
+            ? ""
+            : "<td><b>Glucose:</b></td> <td>" +
+              $("#glucose").val() +
+              " mg/dL</td>";
+        $("#info").append(
+          "<tr><td><b>Name: </b></td> <td>" +
+            $("#name").val() +
+            "</td></tr>" +
+            "<tr><td><b>Address: </b></td> <td>" +
+            $("#address").val() +
+            "</td></tr>" +
+            "<tr><td><b>Mobile: </b></td> <td>" +
+            $("#mobile").val() +
+            "</td></tr>" +
+            "<tr><td><b>Age: </b></td> <td>" +
+            $("#ageY").val() +
+            " Years " +
+            $("#ageM").val() +
+            " Months</td></tr>" +
+            "<tr><td><b>Gender: </b></td> <td>" +
+            $("#gender").val() +
+            "</td></tr>" +
+            "<tr><td> </td> <td> </td></tr>" +
+            "<tr>" +
+            weight +
+            "</tr>" +
+            "<tr>" +
+            bp +
+            "</tr>" +
+            "<tr>" +
+            glucose +
+            "</tr>"
+        );
+        $("#dialog2").dialog("close");
+      }
 
+      function addDesc() {
+        $("#clinDesc").empty();
+        $("#clinDesc").append(
+          "<tr><td><b>Query: </b></td> <td>" +
+            $("#query").val().replace(/\n/g, "<br />") +
+            "</td></tr>" +
+            "<tr><td><b>Diagnosis: </b></td> <td>" +
+            $("#provDiag").val().replace(/\n/g, "<br />") +
+            "</td></tr>" +
+            "<tr><td><b>Advice: </b></td> <td>" +
+            $("#advice").val().replace(/\n/g, "<br />") +
+            "</td></tr>" +
+            "<tr><td><b>Follow Up: </b></td> <td>" +
+            $("#datepicker").val() +
+            "</tr>"
+        );
+        $("#dialog3").dialog("close");
       }
     </script>
 
@@ -134,29 +220,23 @@
         width: 50px;
       }
 
-      .ui-autocomplete { 
-       height: 170px;
-       overflow-y: scroll;
-       overflow-x: hidden;
-       z-index: 111 !important;
-     }
+      .ui-autocomplete {
+        height: 170px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        z-index: 111 !important;
+      }
 
-      .addFields {
-        border-radius: 8px;
-        height: 40px;
-        background-color: #0174cf;
+      input[type="button"] {
+        border: none;
         color: white;
-        font-weight: 700;
+        padding: 8px 16px;
+        background-color: #0174cf;
       }
 
       #btnPrint {
         float: right;
-        margin-right: 20px;
-        border-radius: 8px;
-        height: 40px;
         background-color: #046a7a;
-        color: white;
-        font-weight: 700;
       }
     </style>
   </head>
@@ -172,38 +252,38 @@
           MO. RH Sakra, Muzaffarpur<br />
         </span>
       </div>
+      <br />
+      <hr style="height: 3px; background-color: rgb(151 187 111)" />
+      <b>Consultation Date:</b>
+      <input style="border: none" type="text" id="datepicker2" /> <br /><br />
+      <div style="background: rgb(234 234 234)">
+        <b><u>Patient Info:</u></b>
+        <input
+          type="button"
+          value="Add Patient Info"
+          id="addInfo"
+          class="excluded"
+        />
+        <!--Patient Info-->
+        <table id="info" style="border-spacing: 5px"></table>
+      </div>
+      <br />
       <hr />
-      <hr />
-      <b>Patient Info:</b>
+      <b>Clinical Description:</b>
       <input
         type="button"
-        value="Add Patient Info"
-        id="addInfo"
-        class="addFields"
+        value="Add Clinical Description"
+        id="addDesc"
+        class="excluded"
       />
-      <!--Patient Info-->
+      <!--Clinical Description-->
+      <table id="clinDesc" style="border-spacing: 10px"></table>
+      <br />
       <hr />
       <br />
-      <table id="diagnosis" style="border-spacing: 15px">
-        <tr>
-          <td><b>Query:</b></td>
-          <td><textarea rows="3" cols="25" id="query"></textarea></td>
-        </tr>
-        <tr>
-          <td><b>Provisional Diagnosis:</b></td>
-          <td><textarea rows="3" cols="25" id="provDiag"></textarea></td>
-        </tr>
-        <tr>
-          <td><b>Advice:</b></td>
-          <td><textarea rows="3" cols="25" id="advice"></textarea></td>
-        </tr>
-        <tr>
-          <td><b>Follow Up:</b></td>
-          <td><input type="text" id="datepicker" style="width: 208px" /></td>
-        </tr>
-      </table>
-      <br /><br /><br />
       <b>Rx:</b>
+      <input type="button" value="Add Rx" id="addRx" class="excluded" />
+      <!--Rx-->
       <table id="rx" style="border-spacing: 10px">
         <tr>
           <td><b style="padding-right: 30px">Name:</b></td>
@@ -215,15 +295,8 @@
 
     <br /><br /><br />
     <hr />
-    <input type="button" value="Add Rx" id="addRx" class="addFields" />
-    <input type="button" value="Save as PDF" id="btnPrint" />
 
-    <input type="button" onclick="testPrint()" value="Add" />
-    <script>
-      function testPrint() {
-        $("#rx").printThis({});
-      }
-    </script>
+    <input type="button" value="Save as PDF" id="btnPrint" />
 
     <!--All Dialog begins-->
     <div id="dialog" title="Add Rx">
@@ -260,7 +333,7 @@
     <!--Dialog 1 ends-->
 
     <div id="dialog2" title="Add Patient Info">
-      <table id="info">
+      <table>
         <tr>
           <td>Patient Name:</td>
           <td><input type="text" id="name" /></td>
@@ -324,7 +397,37 @@
           </td>
         </tr>
       </table>
+      <br /><br />
       <input type="button" onclick="addInfo()" value="Add Info" />
     </div>
+    <!--Dialog 2 ends-->
+
+    <div id="dialog3" title="Add Clinical Description">
+      <table>
+        <tr>
+          <td><b>Query:</b></td>
+          <td><textarea rows="3" cols="25" id="query"></textarea></td>
+        </tr>
+        <tr>
+          <td><b>Diagnosis:</b></td>
+          <td><textarea rows="3" cols="25" id="provDiag"></textarea></td>
+        </tr>
+        <tr>
+          <td><b>Advice:</b></td>
+          <td><textarea rows="3" cols="25" id="advice"></textarea></td>
+        </tr>
+        <tr>
+          <td><b>Follow Up:</b></td>
+          <td><input type="text" id="datepicker" style="width: 265px" /></td>
+        </tr>
+      </table>
+      <br /><br />
+      <input
+        type="button"
+        onclick="addDesc()"
+        value="Add Clinical Description"
+      />
+    </div>
+    <!--Dialog Ends-->
   </body>
 </html>
