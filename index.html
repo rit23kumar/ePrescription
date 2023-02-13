@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+    <script src="printThis.js"></script>
     <link
       rel="stylesheet"
       href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css"
@@ -37,8 +38,8 @@
           });
         });
 
-        $('#gender').selectmenu().selectmenu('refresh', true);
-        $('.ui-selectmenu-button').attr("style",'width:auto');
+        $("#gender").selectmenu().selectmenu("refresh", true);
+        $(".ui-selectmenu-button").attr("style", "width:auto");
       });
       //<!--Ready function ends-->
 
@@ -54,7 +55,7 @@
         //Set value attribute to the provided values, so that it iwll appear in print
         var inputElements = $("#mainFrm input");
         for (var i = 0; i < inputElements.length; i++) {
-          $(inputElements[i]).attr('value', inputElements[i].value);
+          $(inputElements[i]).attr("value", inputElements[i].value);
         }
 
         var textArea = $("#mainFrm textarea");
@@ -62,11 +63,18 @@
           $(textArea[i]).text($(textArea[i]).val());
         }
 
-        const pName = $('#name').val().split(' ').join('_');
-        const dateStamp = new Date().toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+        const pName = $("#name").val().split(" ").join("_");
+        const dateStamp = new Date()
+          .toISOString()
+          .replace(/T.*/, "")
+          .split("-")
+          .reverse()
+          .join("-");
         var divContents = $("#mainFrm").html();
         var printWindow = window.open("", "", "height=400,width=800");
-        printWindow.document.write("<html><head><title>EP-"+pName+"_"+dateStamp+"</title>");
+        printWindow.document.write(
+          "<html><head><title>EP-" + pName + "_" + dateStamp + "</title>"
+        );
         printWindow.document.write("</head><body >");
         printWindow.document.write(divContents);
         printWindow.document.write("</body></html>");
@@ -139,11 +147,8 @@
       </div>
       <hr />
       <hr />
+      <b>Patient Info:</b>
       <table id="info">
-        <tr>
-          <td><b>Patient Info:</b></td>
-          <td></td>
-        </tr>
         <tr>
           <td>Patient Name:</td>
           <td><input type="text" id="name" /></td>
@@ -237,6 +242,14 @@
     <hr />
     <input type="button" value="Add Rx" id="addRx" />
     <input type="button" value="Save as PDF" id="btnPrint" />
+
+    <input type="button" onclick="testPrint()" value="Add" />
+    <script>
+            function testPrint(){
+              $('#rx').printThis({
+      });
+            }
+    </script>
 
     <!--Dialog div begins-->
     <div id="dialog" title="Add Rx">
