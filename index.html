@@ -106,6 +106,7 @@
           .end();
       };
       $("#btnPrint").live("click", function () {
+        $('#datepicker2').attr("value", $('#datepicker2').val());
         const pName = $("#name").val().split(" ").join("_");
         const dateStamp = new Date()
           .toISOString()
@@ -216,6 +217,12 @@
     </script>
 
     <style>
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+        }
+      }
+
       .small-Width {
         width: 50px;
       }
