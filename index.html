@@ -29,6 +29,25 @@
           $("#dialog").dialog("open");
         });
 
+        //Dialog 2
+        $("#dialog2").dialog({
+          autoOpen: false,
+          modal: true,
+          resizable: false,
+          width: "auto",
+          show: {
+            effect: "blind",
+            duration: 500,
+          },
+          hide: {
+            effect: "explode",
+            duration: 500,
+          },
+        });
+        $("#addInfo").click(function () {
+          $("#dialog2").dialog("open");
+        });
+
         $(function () {
           $.getJSON("medName.txt", function (data) {
             availableTags = data;
@@ -40,6 +59,11 @@
 
         $("#gender").selectmenu().selectmenu("refresh", true);
         $(".ui-selectmenu-button").attr("style", "width:auto");
+
+        $(function () {
+          $("#datepicker").datepicker();
+          $("#datepicker").datepicker("option", "dateFormat", "DD, d MM, yy");
+        });
       });
       //<!--Ready function ends-->
 
@@ -99,6 +123,10 @@
         );
         $("#dialog").dialog("close");
       }
+
+      function addInfo(){
+
+      }
     </script>
 
     <style>
@@ -106,15 +134,21 @@
         width: 50px;
       }
 
-      .ui-autocomplete {
+      /* .ui-autocomplete {
         position: absolute;
         top: 0;
         left: 0;
         cursor: default;
-        z-index: 111 !important;
-      }
+        
+      } */
+      .ui-autocomplete { 
+       height: 200px;
+       overflow-y: scroll;
+       overflow-x: hidden;
+       z-index: 111 !important;
+     }
 
-      #addRx {
+      .addFields {
         border-radius: 8px;
         height: 40px;
         background-color: #0174cf;
@@ -148,6 +182,91 @@
       <hr />
       <hr />
       <b>Patient Info:</b>
+      <input
+        type="button"
+        value="Add Patient Info"
+        id="addInfo"
+        class="addFields"
+      />
+      <!--Patient Info-->
+      <hr />
+      <br />
+      <table id="diagnosis" style="border-spacing: 15px">
+        <tr>
+          <td><b>Query:</b></td>
+          <td><textarea rows="3" cols="25" id="query"></textarea></td>
+        </tr>
+        <tr>
+          <td><b>Provisional Diagnosis:</b></td>
+          <td><textarea rows="3" cols="25" id="provDiag"></textarea></td>
+        </tr>
+        <tr>
+          <td><b>Advice:</b></td>
+          <td><textarea rows="3" cols="25" id="advice"></textarea></td>
+        </tr>
+        <tr>
+          <td><b>Follow Up:</b></td>
+          <td><input type="text" id="datepicker" style="width: 208px" /></td>
+        </tr>
+      </table>
+      <br /><br /><br />
+      <b>Rx:</b>
+      <table id="rx" style="border-spacing: 10px">
+        <tr>
+          <td><b style="padding-right: 30px">Name:</b></td>
+          <td><b style="padding-right: 40px">Dose:</b></td>
+          <td><b>Duration:</b></td>
+        </tr>
+      </table>
+    </form>
+
+    <br /><br /><br />
+    <hr />
+    <input type="button" value="Add Rx" id="addRx" class="addFields" />
+    <input type="button" value="Save as PDF" id="btnPrint" />
+
+    <input type="button" onclick="testPrint()" value="Add" />
+    <script>
+      function testPrint() {
+        $("#rx").printThis({});
+      }
+    </script>
+
+    <!--All Dialog begins-->
+    <div id="dialog" title="Add Rx">
+      <form>
+        <fieldset>
+          <label for="name">Name:</label>
+          <input
+            type="text"
+            id="medName"
+            value=""
+            class="text ui-widget-content ui-corner-all"
+            autocomplete="off"
+          />
+          <label for="dose">Dose:</label>
+          <input
+            type="text"
+            id="dose"
+            value=""
+            class="text ui-widget-content ui-corner-all"
+          />
+          <label for="duration">Duration:</label>
+          <input
+            type="number"
+            id="duration"
+            value=""
+            class="text ui-widget-content ui-corner-all"
+          />
+          <br /><br />
+          <!-- Allow form submission with keyboard without duplicating the dialog button -->
+          <input type="button" onclick="addMed()" value="Add" />
+        </fieldset>
+      </form>
+    </div>
+    <!--Dialog 1 ends-->
+
+    <div id="dialog2" title="Add Patient Info">
       <table id="info">
         <tr>
           <td>Patient Name:</td>
@@ -212,77 +331,7 @@
           </td>
         </tr>
       </table>
-      <hr />
-      <br />
-      <table id="diagnosis">
-        <tr>
-          <td><b>Query:</b></td>
-          <td><textarea rows="3" cols="25" id="query"></textarea></td>
-        </tr>
-        <tr>
-          <td><b>Provisional Diagnosis:</b></td>
-          <td><textarea rows="3" cols="25" id="provDiag"></textarea></td>
-        </tr>
-        <tr>
-          <td><b>Advice:</b></td>
-          <td><textarea rows="3" cols="25" id="advice"></textarea></td>
-        </tr>
-      </table>
-      <b>Rx:</b>
-      <table id="rx" style="border-spacing: 10px">
-        <tr>
-          <td><b style="padding-right: 30px">Name:</b></td>
-          <td><b style="padding-right: 40px">Dose:</b></td>
-          <td><b>Duration:</b></td>
-        </tr>
-      </table>
-    </form>
-
-    <br /><br /><br />
-    <hr />
-    <input type="button" value="Add Rx" id="addRx" />
-    <input type="button" value="Save as PDF" id="btnPrint" />
-
-    <input type="button" onclick="testPrint()" value="Add" />
-    <script>
-            function testPrint(){
-              $('#rx').printThis({
-      });
-            }
-    </script>
-
-    <!--Dialog div begins-->
-    <div id="dialog" title="Add Rx">
-      <form>
-        <fieldset>
-          <label for="name">Name:</label>
-          <input
-            type="text"
-            id="medName"
-            value=""
-            class="text ui-widget-content ui-corner-all"
-            autocomplete="off"
-          />
-          <label for="dose">Dose:</label>
-          <input
-            type="text"
-            id="dose"
-            value=""
-            class="text ui-widget-content ui-corner-all"
-          />
-          <label for="duration">Duration:</label>
-          <input
-            type="number"
-            id="duration"
-            value=""
-            class="text ui-widget-content ui-corner-all"
-          />
-          <br /><br />
-          <!-- Allow form submission with keyboard without duplicating the dialog button -->
-          <input type="button" onclick="addMed()" value="Add" />
-        </fieldset>
-      </form>
+      <input type="button" onclick="addInfo()" value="Add Info" />
     </div>
-    <!--Dialog div ends-->
   </body>
 </html>
