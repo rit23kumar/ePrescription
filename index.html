@@ -87,6 +87,10 @@
           $("#datepicker2").datepicker("setDate", new Date());
           $("#datepicker2").datepicker("option", "dateFormat", "dd/mm/yy");
         });
+
+        $("#rx").on("click", ".deleteRow", function () {
+          $(this).closest("tr").remove();
+        });
       });
       //<!--Ready function ends-->
 
@@ -106,7 +110,7 @@
           .end();
       };
       $("#btnPrint").live("click", function () {
-        $('#datepicker2').attr("value", $('#datepicker2').val());
+        $("#datepicker2").attr("value", $("#datepicker2").val());
         const pName = $("#name").val().split(" ").join("_");
         const dateStamp = new Date()
           .toISOString()
@@ -131,6 +135,9 @@
         $("#rx").append(
           "<tr>" +
             "<td>" +
+            $("#medType").val() +
+            "</td>" +
+            "<td>" +
             $("#medName").val() +
             "</td>" +
             "<td>" +
@@ -139,6 +146,7 @@
             "<td>" +
             $("#duration").val() +
             " Days</td>" +
+            "<td> <img src='delete.png' class='deleteRow excluded' /></td>" +
             "</tr>"
         );
         $("#dialog").dialog("close");
@@ -198,19 +206,22 @@
 
       function addDesc() {
         $("#clinDesc").empty();
+        //Complaint:
         $("#clinDesc").append(
-          "<tr><td><b>Query: </b></td> <td>" +
-            $("#query").val().replace(/\n/g, "<br />") +
-            "</td></tr>" +
-            "<tr><td><b>Diagnosis: </b></td> <td>" +
-            $("#provDiag").val().replace(/\n/g, "<br />") +
-            "</td></tr>" +
-            "<tr><td><b>Advice: </b></td> <td>" +
-            $("#advice").val().replace(/\n/g, "<br />") +
-            "</td></tr>" +
-            "<tr><td><b>Follow Up: </b></td> <td>" +
-            $("#datepicker").val() +
-            "</tr>"
+          "<tr><td><b>Chief Complaint: </b></td></tr><tr> <td><ul><li>" +
+            $("#query").val().replace(/\n/g, "</li><li>") +
+            "</li></ul></td></tr>" +
+            "<tr><td><b>Provisional Diagnosis: </b></td></tr><tr> <td><ul><li>" +
+            $("#provDiag").val().replace(/\n/g, "</li><li>") +
+            "</li></ul></td></tr>"
+        );
+        //Advice:
+        $("#adviceTable").empty();
+        $("#adviceTable").append(
+          "<tr><td><b>Advice: </b></td></tr><tr> <td><ul><li>" +
+            $("#advice").val().replace(/\n/g, "</li><li>") +
+            "</li></ul></td></tr>" +
+            "<tr><td><b>Follow Up: </b>"+$("#datepicker").val() +" </td> </tr>"
         );
         $("#dialog3").dialog("close");
       }
@@ -264,7 +275,7 @@
       <b>Consultation Date:</b>
       <input style="border: none" type="text" id="datepicker2" /> <br /><br />
       <div style="background: rgb(234 234 234)">
-        <b><u>Patient Info:</u></b>
+        <b>Patient Info:</b>
         <input
           type="button"
           value="Add Patient Info"
@@ -293,22 +304,32 @@
       <!--Rx-->
       <table id="rx" style="border-spacing: 10px">
         <tr>
+          <td><b style="padding-right: 10px">Type:</b></td>
           <td><b style="padding-right: 30px">Name:</b></td>
           <td><b style="padding-right: 40px">Dose:</b></td>
           <td><b>Duration:</b></td>
         </tr>
       </table>
+      <br />
+      <hr />
+      <!--Advice-->
+      <table id="adviceTable" style="border-spacing: 10px"></table>
     </form>
-
-    <br /><br /><br />
     <hr />
 
     <input type="button" value="Save as PDF" id="btnPrint" />
-
+    <br /><br />
     <!--All Dialog begins-->
     <div id="dialog" title="Add Rx">
       <form>
         <fieldset>
+          <label for="type">Medicine Type:</label>
+          <select name="medType" id="medType">
+            <option value="Tab">Tablet</option>
+            <option value="Syr">Syrup</option>
+            <option value="Inj">Injection</option>
+            <option value="Drp">Drop</option>
+          </select>
           <label for="name">Name:</label>
           <input
             type="text"
@@ -383,7 +404,7 @@
           <td></td>
         </tr>
         <tr>
-          <td><b>Diagnostics:</b></td>
+          <td><b>Provisional Diagnostics:</b></td>
           <td></td>
         </tr>
         <tr>
@@ -412,7 +433,7 @@
     <div id="dialog3" title="Add Clinical Description">
       <table>
         <tr>
-          <td><b>Query:</b></td>
+          <td><b>Chief Complaint:</b></td>
           <td><textarea rows="3" cols="25" id="query"></textarea></td>
         </tr>
         <tr>
